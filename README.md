@@ -21,5 +21,5 @@ Watch me solve these
 
 [My YouTube channel](https://www.youtube.com/@thatonegirlinbtech)
 
-[YouTube playlist](https://github.com/matiassingers/awesome-readme)
+[YouTube playlist](https://www.youtube.com/playlist?list=PLI9IU_4HLCWHw1iZEfBUpwJnXdc91YQUd)
 
