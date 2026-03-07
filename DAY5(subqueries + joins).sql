@@ -174,6 +174,7 @@ LEFT JOIN departments d
 	ON e.dept_id = d.dept_id
 
 
+
 -- Show department names and how many employees are in each department.
 SELECT
 	 d.dept_name,
@@ -185,7 +186,17 @@ ON
 	e.dept_id = d.dept_id
 GROUP BY d.dept_name
 
+-- this query is incorrect as it talks about the employees and their correspondin departments while we needed to find the count of employees per DEPARTMENT. 
 
+SELECT
+	COUNT(e.name),
+	d.dept_name
+FROM departments d
+LEFT JOIN employees e
+	ON e.dept_id = d.dept_id
+GROUP BY d.dept_name
+
+	
 -- show only departments with more than 1 employee
 SELECT
 	d.dept_name,
