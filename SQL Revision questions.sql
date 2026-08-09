@@ -58,70 +58,74 @@ VALUES
 EASY (1-6)
 Q1
 -- Show all employees working in Mumbai.
-SELECT 
-	name as emp_name
+SELECT
+	name
 FROM 
 	employee
 WHERE 
-city = 'Mumbai'
-
+	city = 'Mumbai'
 
 Q2
 -- Display employee name and salary in descending order.
 
 SELECT
 	name as emp_name,
-	salary
+	 salary
 FROM 
 	employee
-ORDER BY salary	DESC
+ORDER BY salary DESC
 
 Q3
 -- Find employees earning more than ₹60,000.
 
 SELECT
-	name as emp_name
+	name
 FROM 
 	employee
-WHERE
+WHERE 
 	salary > 60000
 	
 Q4
 -- Show number of employees in each department.
 
-
 SELECT
-	department,
-	COUNT(department) as emp_per_dept
+	COUNT(emp_id) as no_of_emp,
+	department
 FROM 
 	employee
-GROUP BY department 
-
+GROUP BY 
+	department
+ORDER BY COUNT(emp_id) DESC
 
 Q5
 -- Show departments having more than 2 employees.
 
 SELECT
-	department,
-	COUNT(department) as emp_per_dept
+	COUNT(emp_id) as no_of_emp,
+	department
 FROM 
 	employee
-GROUP BY department 
-HAVING COUNT(department) > 2
-
+GROUP BY 
+	department
+HAVING 
+	COUNT(emp_id) >2
 
 Q6
 Display departments having no employees.
 
 SELECT
-	-- COUNT(d.dept_name) as emp_per_dept, 
+	COUNT(e.emp_id) as no_of_emp,
 	d.dept_name
 FROM 
 	department d
-LEFT JOIN employee e
-ON e.department = d.dept_name
-GROUP BY d.dept_name
-HAVING COUNT(e.emp_id) = 0
+LEFT JOIN
+	employee e
+ON 	
+	e.department = d.dept_name
+GROUP BY 
+		d.dept_name
+HAVING 
+	COUNT(e.emp_id) = 0
 
 
 MEDIUM (7-14)
@@ -176,38 +180,72 @@ sum(salary) as total_salary,
 department
 from employee 
 group by department) t)
-			
-
-
-
-
-
-
-
-
-
-
-
-
 
 Q10
 Find employees who belong to departments that exist in the departments table.
 (IN)
 
+SELECT 
+	e.name as emp_name
+FROM 
+	employee e
+WHERE e.depart IN (SELECT d.dept_name
+FROM department d)
+	
 Q11
 Find employees whose department does NOT exist in the departments table.
 (NOT EXISTS)
+
+SELECT
+	e.name as emp_name
+FROM 
+	employee e
+WHERE NOT EXISTS (SELECT d.dept_id 
+FROM department d
+WHERE e.dept_id = d.dept_id)
+
 
 Q12
 Show all employees along with their department names.
 (LEFT JOIN)
 
+SELECT
+	e.name as emp_name,
+	d.dept_name as dept_name
+FROM 
+	employee e
+LEFT JOIN 
+	department d
+ON e.dept_id = d.dept_id
+
+
 Q13
 Find departments with zero employees.
 (LEFT JOIN + NULL)
 
+SELECT
+	d.dept_name as dept_name
+FROM 
+	department d
+LEFT JOIN 
+	employee e
+ON e.dept_id = d.dept_id
+WHERE e.emp_id IS NULL
+
 Q14
 Show department names and employee count including departments with zero employees.
+
+SELECT
+	d.dept_id,
+	d.dept_name as dept_name,
+	COUNT(e.emp_id) as emp_count
+FROM 
+	department d
+LEFT JOIN 
+	employee e
+ON e.dept_id = d.dept_id
+GROUP BY d.dept_id, d.dept_name
+ORDER BY d.dept_id ASC
 
 DIFFICULT (15-20)
 Q15
