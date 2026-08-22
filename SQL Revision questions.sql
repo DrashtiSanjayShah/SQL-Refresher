@@ -252,22 +252,107 @@ Q15
 Find employees hired before the average hire date of their department.
 (Correlated Subquery with Dates)
 
+
+SELECT 
+	e.name as emp_name
+FROM 
+	employee e 
+WHERE 
+	e.hire_date < (SELECT
+        TO_TIMESTAMP(
+            AVG(EXTRACT(EPOCH FROM sub.hire_date))
+        )
+				FROM
+					employee sub
+				WHERE e.dept_id = sub.dept_id
+				)
+
+
+
 Q16
 Find employees earning the highest salary in each department.
 (Correlated Subquery)
 
+SELECT
+	e.name as emp_name,
+	department
+FROM
+	employee e 
+WHERE e.salary = 
+(SELECT
+	
+	MAX(sub.salary) as max_salary
+FROM
+	employee sub
+WHERE e.dept_id = sub.dept_id
+)
+GROUP BY e.department, e.name
+
+
 Q17
 Find departments where every employee earns more than ₹50,000.
-(NOT EXISTS)
+
+
+SELECT
+	e.department
+FROM 
+	employee e
+WHERE NOT EXISTS 	
+(SELECT 
+	sub.department
+FROM 	
+	employee sub
+	WHERE sub.dept_id = e.dept_id
+	AND sub.salary <= 50000)
+GROUP BY e.department
+	
 
 Q18
 Show employees who earn more than the highest salary in the HR department.
 (Scalar Subquery)
 
+SELECT
+	e.name,
+	e.salary
+FROM 
+	employee e
+WHERE e.salary >
+				(SELECT 
+					MAX(sub.salary)
+				FROM 	
+					employee sub
+					WHERE sub.department = 'HR'
+					)
+
+
 Q19
 Find employees who work in the same city as the highest-paid employee.
 (Nested Subqueries)
 
+SELECT
+e.name,
+e.city
+FROM 
+	employee e
+WHERE e.city = 
+(SELECT
+	sub.city
+FROM 
+	employee sub
+ORDER BY sub.salary DESC LIMIT 1)
+
+
 Q20
 Find departments whose average salary is higher than the company's overall average salary.
 (Subquery + GROUP BY + HAVING)
+
+SELECT
+	e.department
+FROM 
+	employee e
+GROUP BY e.department
+HAVING AVG(e.salary) > 
+(SELECT 
+	AVG(sub.salary)
+FROM
+	employee sub)
